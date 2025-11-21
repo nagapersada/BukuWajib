@@ -1,5 +1,39 @@
 <!DOCTYPE html>
 <html lang="id">
+    <!-- TAMBAHKAN INI DI DALAM FOLDER APLIKASI YANG MACET (misal: Gaskeun/index.html) -->
+<style>
+    /* PERBAIKAN KHUSUS LANDSCAPE (MIRING) */
+    @media (orientation: landscape) {
+        /* 1. Paksa agar bisa di-scroll */
+        html, body {
+            height: auto !important;
+            min-height: 100vh !important;
+            overflow-y: auto !important;
+            position: static !important;
+        }
+
+        /* 2. Kecilkan logo/gambar agar tidak menuhin layar */
+        img, .logo {
+            max-height: 120px !important;
+            width: auto !important;
+            margin-top: 10px !important;
+            margin-bottom: 10px !important;
+        }
+
+        /* 3. Kecilkan judul */
+        h1, h2, .title {
+            font-size: 1.2rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        /* 4. Pastikan konten padding aman */
+        .container, .wrapper, section {
+            padding-bottom: 50px !important;
+            height: auto !important;
+        }
+    }
+</style>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
