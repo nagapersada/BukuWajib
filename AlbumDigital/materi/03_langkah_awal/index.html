@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Edukasi DNA Naga Persada</title>
+    <link rel="icon" href="DVlogo.png" type="image/png">
+    
+    <style>
+        /* --- 1. VARIABEL WARNA & RESET --- */
+        :root {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-highlight: #334155;
+            --accent-color: #fbbf24;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            height: 100%; margin: 0; padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0f172a; color: var(--text-main);
+            overflow: hidden; /* Mencegah scroll browser luar */
+        }
+
+        /* --- 2. CONTAINER UTAMA --- */
+        .main-card {
+            display: flex;
+            flex-direction: column; /* Default Portrait: Atas-Bawah */
+            width: 100%; height: 100%;
+            background-color: var(--bg-card);
+            overflow: hidden;
+        }
+
+        /* --- 3. PANEL KIRI (INFO & PLAYER) --- */
+        .left-panel {
+            /* Default Portrait */
+            padding: 20px;
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+            display: flex; flex-direction: column;
+            align-items: center; text-align: center;
+            border-bottom: 1px solid var(--bg-highlight);
+            flex-shrink: 0; /* Jangan menyusut */
+            z-index: 20;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .logo-img {
+            width: 90px; height: 90px;
+            border-radius: 50%; border: 2px solid var(--accent-color);
+            padding: 2px; object-fit: cover; margin-bottom: 10px;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+        }
+
+        h1 { margin: 0; font-size: 1.2rem; color: var(--accent-color); text-transform: uppercase; line-height: 1.2; }
+        .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; font-style: italic; }
+
+        audio {
+            width: 100%; max-width: 100%; margin-top: 15px; height: 40px;
+            border-radius: 20px;
+        }
+
+        /* --- 4. PANEL KANAN (TRANSKRIP) --- */
+        .right-panel {
+            flex-grow: 1; /* Mengisi sisa ruang */
+            display: flex; flex-direction: column;
+            background-color: var(--bg-card);
+            overflow: hidden; /* Kunci container */
+        }
+
+        .transkrip-header {
+            padding: 15px 20px; background: rgba(30, 41, 59, 0.95);
+            border-bottom: 1px solid var(--bg-highlight);
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted);
+        }
+
+        .transkrip-list {
+            flex-grow: 1;
+            overflow-y: auto; /* Scroll di sini */
+            padding: 15px;
+        }
+
+        /* Item Transkrip */
+        .transkrip-item {
+            display: flex; align-items: center; padding: 12px; margin-bottom: 8px;
+            background-color: rgba(51, 65, 85, 0.3); border-radius: 8px;
+            border-left: 3px solid transparent; cursor: pointer; transition: all 0.2s;
+        }
+        .transkrip-item:hover { background-color: var(--bg-highlight); }
+        .transkrip-item.active {
+            background-color: rgba(251, 191, 36, 0.1);
+            border-left: 3px solid var(--accent-color);
+        }
+        .transkrip-item.active strong { color: var(--accent-color); }
+        .transkrip-item strong { font-size: 0.9rem; color: var(--text-main); }
+        
+        .time-badge {
+            font-size: 0.7rem; color: var(--text-muted); background: rgba(0,0,0,0.3);
+            padding: 2px 6px; border-radius: 4px; margin-right: 10px; min-width: 40px; text-align: center;
+        }
+
+        .footer-info {
+            margin-top: 15px; font-size: 0.7rem; color: var(--text-muted); opacity: 0.7;
+        }
+
+        /* --- 5. MEDIA QUERY: TABLET & DESKTOP (Layar Besar) --- */
+        @media (min-width: 768px) {
+            body { padding: 40px; }
+            .main-card {
+                flex-direction: row; /* Kiri-Kanan */
+                border-radius: 16px; max-width: 1200px; max-height: 90vh;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
+            }
+            .left-panel {
+                width: 350px; justify-content: center; padding: 40px;
+                border-bottom: none; border-right: 1px solid var(--bg-highlight);
+            }
+            .logo-img { width: 130px; height: 130px; margin-bottom: 20px; }
+            h1 { font-size: 1.6rem; }
+            .subtitle { font-size: 1rem; }
+            audio { margin-top: 30px; height: 50px; }
+            .footer-info { position: absolute; bottom: 20px; left: 0; width: 350px; }
+        }
+
+        /* --- 6. MEDIA QUERY: MOBILE LANDSCAPE (HP MIRING) - INI YANG KACAU SEBELUMNYA --- */
+        @media (max-width: 900px) and (orientation: landscape) {
+            body { padding: 0; }
+            .main-card {
+                flex-direction: row; /* Tetap Kiri-Kanan */
+                border-radius: 0;
+            }
+            
+            /* PANEL KIRI: Scrollable & Kompak */
+            .left-panel {
+                width: 40%; /* Lebar 40% layar */
+                height: 100%; /* Full tinggi */
+                padding: 15px;
+                justify-content: center; /* Tengah vertikal */
+                overflow-y: auto; /* KUNCI: Agar bisa discroll jika mentok */
+                border-right: 1px solid var(--bg-highlight);
+                border-bottom: none;
+            }
+
+            .right-panel {
+                width: 60%; /* Sisa layar */
+            }
+
+            /* Penyesuaian Ukuran agar muat */
+            .logo-img { width: 70px; height: 70px; margin-bottom: 8px; }
+            h1 { font-size: 1rem; }
+            .subtitle { font-size: 0.75rem; display: block; }
+            audio { margin-top: 10px; height: 35px; }
+            .footer-info { position: static; margin-top: 10px; } /* Tidak floating, ikut scroll */
+            
+            .transkrip-list { padding: 10px; }
+            .transkrip-item { padding: 8px; margin-bottom: 5px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="main-card">
+        
+        <div class="left-panel">
+            <img src="DVlogo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <h1>DNA NAGA PERSADA</h1>
+            <p class="subtitle">Oleh: Deka Sonjaya</p>
+
+            <audio id="audioPlayer" controls controlsList="nodownload">
+                <source src="pelDNAnaga.mp3" type="audio/mpeg">
+                Browser Anda tidak mendukung elemen audio.
+            </audio>
+
+            <div class="footer-info">
+                &copy; 2025 - DVTEAM Naga Persada<br>
+                Membangun Sinergi, Meraih Prestasi
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="transkrip-header">
+                Materi Pembahasan
+            </div>
+            <div id="transkripContainer" class="transkrip-list">
+                </div>
+        </div>
+
+    </div>
+
+    <script>
+        const transkrip = [
+            { time: 0, title: "Pembuka & Pengantar" },
+            { time: 70, title: "Sesi 1: Fondasi Pola Pikir" },
+            { time: 229, title: "Sesi 2: Alur Percakapan Naga" },
+            { time: 457, title: "Tahap Konsultasi & Closing" },
+            { time: 540, title: "Penanganan Masalah (Diagnostik)" },
+            { time: 688, title: "Sesi 3: Dari Anggota Baru ke Ketua Tim" },
+            { time: 735, title: "Kesimpulan dan Tiga Poin Utama" },
+            { time: 892, title: "Penutup Akhir & Motivasi" }
+        ];
+        
+        const audioPlayer = document.getElementById('audioPlayer');
+        const transkripContainer = document.getElementById('transkripContainer');
+        let transkripItems = [];
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function createTranskripElements() {
+            transkrip.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.classList.add('transkrip-item');
+                div.dataset.time = item.time;
+                
+                const badge = document.createElement('span');
+                badge.classList.add('time-badge');
+                badge.textContent = formatTime(item.time);
+
+                const title = document.createElement('strong');
+                title.textContent = item.title;
+
+                div.appendChild(badge);
+                div.appendChild(title);
+                
+                div.addEventListener('click', () => {
+                    audioPlayer.currentTime = item.time;
+                    if(audioPlayer.paused) audioPlayer.play();
+                });
+
+                transkripContainer.appendChild(div);
+                transkripItems.push(div);
+            });
+        }
+
+        function highlightTranskrip() {
+            const currentTime = audioPlayer.currentTime;
+            let activeIndex = -1;
+            
+            for (let i = transkrip.length - 1; i >= 0; i--) {
+                if (currentTime >= transkrip[i].time) {
+                    activeIndex = i;
+                    break;
+                }
+            }
+
+            transkripItems.forEach((item, index) => {
+                if (index === activeIndex) {
+                    if (!item.classList.contains('active')) {
+                        item.classList.add('active');
+                        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        audioPlayer.addEventListener('timeupdate', highlightTranskrip);
+        createTranskripElements();
+    </script>
+
+</body>
+</html>
