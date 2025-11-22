@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pejuang Tangguh - Audio Experience</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap');
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent-gold: #d4af37; /* Emas yang lebih elegan */
+            --player-bg: rgba(20, 20, 20, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden; /* Mencegah scroll */
+        }
+
+        /* --- LAYOUT UTAMA (Flexbox) --- */
+        .app-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            flex-direction: column; /* Default: Portrait (Atas-Bawah) */
+        }
+
+        /* --- BAGIAN VISUAL (GAMBAR & CANVAS) --- */
+        .visual-section {
+            position: relative;
+            flex: 1; /* Mengambil sisa ruang */
+            background: url('pejuangtangguh.png') no-repeat center center;
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        /* Overlay Gelap agar visualizer terlihat */
+        .visual-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+        }
+
+        canvas#visualizer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px; /* Tinggi visualizer */
+            z-index: 10;
+        }
+
+        /* --- BAGIAN PLAYER (KONTROL) --- */
+        .player-section {
+            flex: 0 0 auto; /* Ukuran menyesuaikan konten */
+            background-color: var(--player-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 20;
+        }
+
+        .track-info {
+            margin-bottom: 20px;
+        }
+
+        .track-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .track-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* Kustomisasi Audio Player Bawaan */
+        audio {
+            width: 100%;
+            height: 45px;
+            border-radius: 30px;
+            outline: none;
+        }
+        
+        /* Filter warna untuk player bawaan agar senada */
+        audio::-webkit-media-controls-panel {
+            background-color: #e0e0e0;
+        }
+
+        /* --- MEDIA QUERIES (RESPONSIF LANDSCAPE) --- */
+        @media (orientation: landscape) {
+            .app-container {
+                flex-direction: row; /* Berubah menjadi Kiri-Kanan */
+            }
+
+            .visual-section {
+                flex: 1.5; /* Gambar mengambil porsi lebih besar (KIRI) */
+                border-right: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .player-section {
+                flex: 1; /* Player di sebelah KANAN */
+                max-width: 450px; /* Batasi lebar player agar elegan */
+                border-top: none;
+                border-left: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 0 50px;
+            }
+
+            .track-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Responsif untuk HP Portrait Kecil */
+        @media (max-height: 600px) and (orientation: portrait) {
+            .player-section {
+                padding: 20px;
+            }
+            .track-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="visual-section">
+            <div class="visual-overlay"></div>
+            <canvas id="visualizer"></canvas>
+        </div>
+
+        <div class="player-section">
+            <div class="track-info">
+                <h1 class="track-title">Pejuang Tangguh</h1>
+                <p class="track-subtitle">Narasi Motivasi Bisnis & Kehidupan</p>
+            </div>
+            
+            <audio id="audio-player" controls controlsList="nodownload">
+                <source src="pejuangtangguh(2).mp3" type="audio/mpeg">
+                Browser Anda tidak mendukung elemen audio.
+            </audio>
+        </div>
+    </div>
+
+    <script>
+        const audioElement = document.getElementById('audio-player');
+        const canvas = document.getElementById('visualizer');
+        const canvasCtx = canvas.getContext('2d');
+        const visualSection = document.querySelector('.visual-section');
+
+        let audioContext;
+        let analyser;
+        let isAudioSetup = false;
+
+        // Setup Context saat user pertama kali klik Play
+        // (Browser modern memblokir AudioContext tanpa interaksi user)
+        audioElement.addEventListener('play', () => {
+            if (!isAudioSetup) {
+                setupAudioVisualizer();
+            }
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        });
+
+        function setupAudioVisualizer() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const source = audioContext.createMediaElementSource(audioElement);
+                analyser = audioContext.createAnalyser();
+                
+                source.connect(analyser);
+                analyser.connect(audioContext.destination);
+                
+                analyser.fftSize = 256;
+                isAudioSetup = true;
+                
+                // Atur ukuran canvas pertama kali
+                resizeCanvas();
+                draw();
+            } catch (e) {
+                console.log("Audio Context Error (Mungkin diputar lokal tanpa server):", e);
+            }
+        }
+
+        function draw() {
+            requestAnimationFrame(draw);
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const barWidth = (canvas.width / bufferLength) * 2.5;
+            let barHeight;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                barHeight = (dataArray[i] / 255) * canvas.height;
+
+                // Membuat gradasi warna emas elegan
+                const gradient = canvasCtx.createLinearGradient(0, canvas.height, 0, canvas.height - barHeight);
+                gradient.addColorStop(0, 'rgba(212, 175, 55, 0.2)'); // Emas transparan bawah
+                gradient.addColorStop(1, 'rgba(255, 215, 0, 0.9)');  // Emas solid atas
+
+                canvasCtx.fillStyle = gradient;
+                
+                // Menggambar bar dengan sudut membulat di atas
+                canvasCtx.beginPath();
+                canvasCtx.roundRect(x, canvas.height - barHeight, barWidth, barHeight, [5, 5, 0, 0]);
+                canvasCtx.fill();
+
+                x += barWidth + 1; // Jarak antar bar
+            }
+        }
+
+        // Mengatur ukuran canvas agar selalu presisi dengan container
+        function resizeCanvas() {
+            canvas.width = visualSection.clientWidth;
+            canvas.height = visualSection.clientHeight * 0.3; // Visualizer mengambil 30% tinggi gambar
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Panggil resize sekali saat load untuk inisialisasi awal
+        window.onload = resizeCanvas;
+
+    </script>
+</body>
+</html>
