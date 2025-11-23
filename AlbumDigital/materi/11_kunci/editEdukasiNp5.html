@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="black">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Presentasi: EDUKASI – Fade Transition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(-45deg, #0f172a, #1e1b4b, #4c1d95, #be185d, #0891b2);
+      background-size: 400% 400%;
+      background-attachment: fixed;
+      animation: gradientBG 20s ease infinite;
+      color: white;
+      padding-bottom: env(safe-area-inset-bottom);
+    }@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+  overflow-y: auto; /* bisa discroll jika konten panjang */
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.card-content {
+  background: rgba(0,0,0,0.4);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 750px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.card h1, .card h2, .card h3 {
+  text-shadow: 0 0 8px rgba(255,255,255,0.6);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1s ease forwards;
+}
+
+.slide.active .card h1,
+.slide.active .card h2,
+.slide.active .card h3 {
+  animation-delay: 0.3s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.emoji-bounce {
+  display: inline-block;
+  animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+#header-info {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.8rem;
+  font-size: 0.7rem;
+  line-height: 1rem;
+  color: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.4);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+#header-info strong {
+  color: #fff;
+}
+
+  </style>
+</head>
+<body>
+  <div id="presentation">
+
+<div class="slide active">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h1 class="text-4xl md:text-6xl font-black glow mb-6"><span class="emoji-bounce">🎓</span> Selamat Datang di Jalur Perubahan</h1>
+    <p class="text-xl md:text-2xl">Semua dimulai dari satu kata: <span class="text-amber-300 font-bold glow">EDUKASI</span>. Ini adalah kunci untuk membuka potensi tak terbatas Anda.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h1 class="text-4xl md:text-6xl font-black glow mb-6"><span class="emoji-bounce">✨</span> Kebebasan Finansial Bukan Mimpi</h1>
+    <p class="text-xl md:text-2xl">Tapi hasil dari <span class="text-amber-300 font-bold glow">EDUKASI</span>. Bersama DVTeam NP kita wujudkan impian itu.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h2 class="text-3xl md:text-5xl font-bold text-cyan-300 glow"><span class="emoji-bounce">❓</span> Mengapa EDUKASI?</h2>
+    <p class="mt-6 text-xl md:text-2xl">Dunia berubah cepat: digitalisasi, AI, persaingan global. Tanpa edukasi & upgrade diri, kita akan tertinggal.</p>
+    <p class="mt-4 text-xl md:text-2xl bg-black bg-opacity-25 p-4 rounded-lg shadow-lg">EDUKASI di DVTeam NP bukan teori kosong, tapi <strong>lima kunci aktivitas nyata</strong> yang bisa langsung dipraktikkan.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h2 class="text-6xl font-black text-amber-300 glow"><span class="emoji-bounce">🚀</span> E</h2>
+    <h3 class="text-3xl font-bold mt-2">Eksekusi</h3>
+    <p class="mt-4 text-lg md:text-xl">Ilmu tanpa tindakan = nol besar. Eksekusi artinya berani mulai <strong>sekarang</strong>, bukan nanti.</p>
+    <p class="mt-3 text-base md:text-lg italic">🔑 Realitas: Banyak orang tahu tentang peluang & DVTeam, tapi hanya sedikit yang benar-benar melakukan eksekusi.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h2 class="text-6xl font-black text-cyan-300 glow"><span class="emoji-bounce">👥</span> D</h2>
+    <h3 class="text-3xl font-bold mt-2">Duplikasi</h3>
+    <p class="mt-4 text-lg md:text-xl">Sukses bukan tentang Anda sendiri, tapi bagaimana tim ikut tumbuh dan berkembang.</p>
+    <p class="mt-3 text-base md:text-lg italic">🔑 Di era digital: sistem yang mudah diduplikasi mempercepat pertumbuhan eksponensial.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h2 class="text-6xl font-black text-amber-300 glow"><span class="emoji-bounce">📈</span> K</h2>
+    <h3 class="text-3xl font-bold mt-2">Konsistensi</h3>
+    <p class="mt-4 text-lg md:text-xl">Konsistensi lebih penting daripada semangat sesaat. Inilah kunci yang membuat hasil nyata jangka panjang.</p>
+    <p class="mt-3 text-base md:text-lg italic">🔑 Konsistensi adalah pembeda utama antara mereka yang berhasil dan yang gagal.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h2 class="text-6xl font-black text-cyan-300 glow"><span class="emoji-bounce">🔄</span> A</h2>
+    <h3 class="text-3xl font-bold mt-2">Adaptasi</h3>
+    <p class="mt-4 text-lg md:text-xl">Hidup selalu berubah, pasar selalu bergerak. Yang bertahan adalah mereka yang cepat beradaptasi.</p>
+    <p class="mt-3 text-base md:text-lg italic">🔑 Contoh: Bisnis yang gagal beradaptasi akan kalah oleh kompetitor yang lebih cepat merespons perubahan.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h2 class="text-6xl font-black text-amber-300 glow"><span class="emoji-bounce">🤝</span> S</h2>
+    <h3 class="text-3xl font-bold mt-2">Sinergi</h3>
+    <p class="mt-4 text-lg md:text-xl">Sinergi adalah kerjasama yang menghasilkan kekuatan lebih besar dari sekadar penjumlahan individu.</p>
+    <p class="mt-3 text-base md:text-lg italic">🔑 Networking seringkali lebih berharga daripada sekadar skill individu.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h2 class="text-3xl md:text-5xl font-bold glow mb-6"><span class="emoji-bounce">📚</span> EDUKASI = Jalan Menuju Kebebasan Finansial</h2>
+    <ul class="space-y-3 text-left text-lg md:text-xl">
+      <li><span class="text-amber-300 font-black">E</span> → Eksekusi: Bertindak nyata.</li>
+      <li><span class="text-cyan-300 font-black">D</span> → Duplikasi: Berkembang bersama.</li>
+      <li><span class="text-amber-300 font-black">K</span> → Konsistensi: Disiplin jangka panjang.</li>
+      <li><span class="text-cyan-300 font-black">A</span> → Adaptasi: Siap dengan perubahan.</li>
+      <li><span class="text-amber-300 font-black">S</span> → Sinergi: Sukses kolektif.</li>
+    </ul>
+    <p class="mt-6 text-xl md:text-2xl">👉 Dengan 5 kunci ini, kebebasan finansial bukan sekadar impian.</p>
+  </div>
+</div>
+
+<div class="slide">
+  <div id="header-info">Dipersembahkan oleh:<br><strong>DVTeam Naga Persada</strong></div>
+  <div class="card-content card">
+    <h1 class="text-4xl md:text-6xl font-black glow"><span class="emoji-bounce">🔥</span> Saatnya Bertindak, Saatnya Berubah!</h1>
+    <p class="mt-6 text-xl md:text-2xl">Jangan tunggu sempurna. Mulailah sekarang dengan <span class="text-amber-300 font-bold glow">EDUKASI</span> bersama DVTeam.</p>
+  </div>
+</div>
+
+  </div>
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+      slides.forEach((s, i) => s.classList.remove('active'));
+      slides[index].classList.add('active');
+      currentSlide = index;
+    }
+
+    function nextSlide() {
+      let next = (currentSlide + 1) % slides.length;
+      showSlide(next);
+    }
+
+    function prevSlide() {
+      let prev = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(prev);
+    }
+
+    document.body.addEventListener('click', () => {
+      // masuk fullscreen saat klik pertama
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn("Fullscreen gagal:", err);
+        });
+      }
+      nextSlide();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    let startX = 0;
+    document.body.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+    });
+    document.body.addEventListener('touchend', e => {
+      let endX = e.changedTouches[0].clientX;
+      if (startX - endX > 50) nextSlide();
+      else if (endX - startX > 50) prevSlide();
+    });
+  </script>
+</body>
+</html>
